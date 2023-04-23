@@ -130,22 +130,7 @@ function changeDirection(event) {
             break;
 
     }
-    $(document).on('click', '.button-pad .button', function(e) {
-     var e = jQuery.Event("keydown");
-     if ($(this).hasClass('left-btn')) {
-        e.which = 37;
-     }
-     else if ($(this).hasClass('up-btn')) {
-        e.which = 38;
-     }
-     else if ($(this).hasClass('right-btn')) {
-         e.which = 39;
-     }
-     else if ($(this).hasClass('down-btn')) {
-        e.which = 40;
-     }
-     $(document).trigger(e);
-}); 
+  
 };
 function checkGameOver() {
     switch (true) {
@@ -190,3 +175,35 @@ function resetGame() {
     gameStart();
 
 };
+
+
+  // left key
+  function l() {
+    if(snake.x === 0) {
+      snake.x = -grid;
+      snake.y = 0;
+    }
+  }
+
+  // up key
+  function u() {
+    if(snake.y === 0) {
+      snake.y = -grid;
+      snake.x = 0;
+    }
+  }
+
+  // right key 
+  function r() {
+    if(snake.x === 0) {
+      snake.x = grid;
+      snake.y = 0;
+    }
+  }
+  // down key 
+  function d() {
+    if(snake.y === 0) {
+      snake.y = grid;
+      snake.x = 0;
+    }
+  }
