@@ -98,12 +98,14 @@ function drawSnake() {
         ctx.strokeRect(snakePart.x, snakePart.y, unitSize, unitSize);
     })
 };
+
 function changeDirection(event) {
     const keyPressed = event.keyCode;
     const LEFT = 37;
     const UP = 38;
     const RIGHT = 39;
     const DOWN = 40;
+    console.log(keyPressed)
 
 
     const goingUP = (yVelocity == -unitSize)
@@ -130,8 +132,73 @@ function changeDirection(event) {
             break;
 
     }
-  
-};
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+//USAGE:
+const goingUP = (yVelocity == -unitSize)
+const goingDown = (yVelocity == unitSize)
+const goingRight = (xVelocity == unitSize)
+const goingLeft = (xVelocity == -unitSize)
+
+let pageWidth = window.innerWidth || document.body.clientWidth;
+let treshold = Math.max(1, Math.floor(0.01 * (pageWidth)));
+let touchstartX = 0;
+let touchstartY = 0;
+let touchendX = 0;
+let touchendY = 0;
+
+const limit = Math.tan(45 * 1.5 / 180 * Math.PI);
+const gestureZone = window;
+
+gestureZone.addEventListener('touchstart', function (event) {
+    touchstartX = event.changedTouches[0].screenX;
+    touchstartY = event.changedTouches[0].screenY;
+}, false);
+
+gestureZone.addEventListener('touchend', function (event) {
+    touchendX = event.changedTouches[0].screenX;
+    touchendY = event.changedTouches[0].screenY;
+    handleGesture(event);
+}, false);
+
+function handleGesture(e) {
+    let x = touchendX - touchstartX;
+    let y = touchendY - touchstartY;
+    let xy = Math.abs(x / y);
+    let yx = Math.abs(y / x);
+    if (Math.abs(x) > treshold || Math.abs(y) > treshold) {
+        if (yx <= limit) {
+            if (x < 0) {
+                xVelocity = -unitSize;
+                yVelocity = 0;
+                console.log("left");
+            } else if(x>0){
+                xVelocity = unitSize;
+                yVelocity = 0;
+                console.log("right");
+            }
+        }
+        if (xy <= limit) {
+            if (y < 0) {
+                xVelocity = 0;
+                yVelocity = -unitSize;
+                console.log("top");
+            } else {
+                xVelocity = 0;
+                yVelocity = unitSize;
+                console.log("bottom");
+            }
+        }
+    } else {
+        console.log("tap");
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+//};
 function checkGameOver() {
     switch (true) {
         case (snake[0].x < 0):
@@ -148,24 +215,24 @@ function checkGameOver() {
             break;
 
     }
-    for(let i =1;i<snake.length;i++){
-        if(snake[i].x==snake[0].x&&snake[i].y==snake[0].y)
-        running=false
+    for (let i = 1; i < snake.length; i++) {
+        if (snake[i].x == snake[0].x && snake[i].y == snake[0].y)
+            running = false
     }
 };
 function displayGameOver() {
     ctx.font = "50px MV Boli";
     ctx.fillStyle = "black";
     ctx.textAlign = "center";
-    ctx.fillText("GAME OVER",gameWidth/2,gameHeight/2)
+    ctx.fillText("GAME OVER", gameWidth / 2, gameHeight / 2)
 
 
- };
-function resetGame() { 
+};
+function resetGame() {
     score = 0;
-    xVelocity =unitSize;
+    xVelocity = unitSize;
     yVelocity = 0;
-     snake = [
+    snake = [
         { x: unitSize * 4, y: 0 },
         { x: unitSize * 3, y: 0 },
         { x: unitSize * 2, y: 0 },
@@ -177,33 +244,7 @@ function resetGame() {
 };
 
 
-  // left key
-  function l() {
-    if(snake.x === 0) {
-      snake.x = -grid;
-      snake.y = 0;
-    }
-  }
 
-  // up key
-  function u() {
-    if(snake.y === 0) {
-      snake.y = -grid;
-      snake.x = 0;
-    }
-  }
 
-  // right key 
-  function r() {
-    if(snake.x === 0) {
-      snake.x = grid;
-      snake.y = 0;
-    }
-  }
-  // down key 
-  function d() {
-    if(snake.y === 0) {
-      snake.y = grid;
-      snake.x = 0;
-    }
-  }
+
+
