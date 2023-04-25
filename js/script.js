@@ -164,28 +164,32 @@ gestureZone.addEventListener('touchend', function (event) {
 }, false);
 
 function handleGesture(e) {
+    const goingUP = (yVelocity == -unitSize)
+    const goingDown = (yVelocity == unitSize)
+    const goingRight = (xVelocity == unitSize)
+    const goingLeft = (xVelocity == -unitSize)
     let x = touchendX - touchstartX;
     let y = touchendY - touchstartY;
     let xy = Math.abs(x / y);
     let yx = Math.abs(y / x);
     if (Math.abs(x) > treshold || Math.abs(y) > treshold) {
         if (yx <= limit) {
-            if (x < 0) {
+            if (x < 0 && !goingRight) {
                 xVelocity = -unitSize;
                 yVelocity = 0;
                 console.log("left");
-            } else if(x>0){
+            } else if (x > 0&& !goingLeft) {
                 xVelocity = unitSize;
                 yVelocity = 0;
                 console.log("right");
             }
         }
         if (xy <= limit) {
-            if (y < 0) {
+            if (y < 0&& !goingDown) {
                 xVelocity = 0;
                 yVelocity = -unitSize;
                 console.log("top");
-            } else {
+            } else if (y>0&& !goingUP) {
                 xVelocity = 0;
                 yVelocity = unitSize;
                 console.log("bottom");
